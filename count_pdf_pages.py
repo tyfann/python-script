@@ -2,7 +2,7 @@
 import argparse
 from glob import glob
 from os.path import exists, join
-from PyPDF2 import PdfFileReader
+from pikepdf import Pdf
 
 
 def get_total_pages(folder, recursive=False):
@@ -14,11 +14,10 @@ def get_total_pages(folder, recursive=False):
         pdf_list = glob(join(folder, "*.pdf"), recursive=False)
 
     pages = []
-    for pdf in pdf_list:
-        reader = PdfFileReader(pdf)
-        num_page = reader.getNumPages()
+    for file in pdf_list:
+        pdf = Pdf.open(file)
         # print("%d pages <-- '%s'" % (num_page, pdf))
-        pages.append(num_page)
+        pages.append(len(pdf.pages))
     return sum(pages)
 
 
